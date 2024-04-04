@@ -5,7 +5,14 @@ const Category = require("../models/Category.model");
 
 const getProducts = asyncHandler(async (req, res) => {
   try {
-    const products = await Product.find();
+    const categoryId = req.query.categoryId;
+    console.log("categoryId", categoryId);
+    const limit = parseInt(req.query.limit);
+    let productsQuery = categoryId ? Product.find({ category:categoryId }) : Product.find();
+    if (limit) {
+      productsQuery = productsQuery.limit(limit);
+    }
+    const products = await productsQuery.exec();
     res.json(products);
   } catch (error) {
     res.status(400).json({ message: error.message });

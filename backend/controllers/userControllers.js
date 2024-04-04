@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/User.model");
 const generateToken = require("../configs/generateToken");
+const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, userName, email, password, avatar } = req.body;
@@ -27,7 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
       fullName: user.fullName,
       userName: user.userName,
       email: user.email,
-      avatar: user.pic,
+      avatar: user.avatar,
       token: generateToken(user._id),
     });
   } else {
@@ -64,9 +65,15 @@ const updateUser = asyncHandler(async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Product not found" });
     }
+    let hashedPassword=""
+    if (password) {
+      const salt = await bcrypt.genSalt(9);
+      hashedPassword = await bcrypt.hash(password, salt);
+    }
+    console.log("hash",hashedPassword)
     await User.findByIdAndUpdate(
       id,
-      { fullName, password, avatar },
+      { fullName, password:hashedPassword, avatar },
       { new: true }
     );
     res.send("Updated User successfully");
