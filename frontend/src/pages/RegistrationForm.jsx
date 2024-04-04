@@ -49,7 +49,7 @@ const RegistrationForm = () => {
       password,
     }) => {
       try {
-        await axios.post("http://localhost:8080/user", {
+        await axios.post("https://smoggy-blazer-bass.cyclic.app/user", {
           fullName,
           userName,
           avatar,

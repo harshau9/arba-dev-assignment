@@ -25,7 +25,7 @@ const Login = () => {
 
     onSubmit: async ({ email, password }) => {
       try {
-        const response = await axios.post("http://localhost:8080/user/login", {
+        const response = await axios.post("https://smoggy-blazer-bass.cyclic.app/user/login", {
           email,
           password,
         });
